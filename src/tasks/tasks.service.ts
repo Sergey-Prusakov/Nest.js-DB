@@ -54,10 +54,18 @@ export class TasksService {
   }
 
   async deleteTask(id: string) {
-    return 'InProcess' + id; //////////
+    return await this.taskRepository.destroy({
+      where: {
+        id,
+      },
+    });
   }
 
   async deleteCompletedTasks() {
-    return 'InProcess'; ///////////////
+    return await this.taskRepository.destroy({
+      where: {
+        isDone: true,
+      },
+    });
   }
 }
