@@ -3,20 +3,21 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Task } from './tasks.model';
 import { TaskTextDto } from './dto/task-text-dto';
 import { TaskStatusDto } from './dto/task-status-dto';
-// import { ChangeTaskDto } from './dto/change-task-dto';
 
 @Injectable()
 export class TasksService {
   constructor(@InjectModel(Task) private taskRepository: typeof Task) {}
 
   async getAllTasks() {
-    const tasks = await this.taskRepository.findAll();
+    const tasks = await this.taskRepository.findAll({
+      limit: 10,
+      order: [['createdAt', 'ASC']],
+    });
     return tasks;
   }
 
   async createTask(dto: TaskTextDto) {
-    const task = await this.taskRepository.create(dto);
-    return task;
+    return await this.taskRepository.create(dto);
   }
 
   async changeStatusTask(id: string, dto: TaskStatusDto) {
@@ -24,7 +25,7 @@ export class TasksService {
 
     console.log(task);
 
-    await this.taskRepository.update(
+    return await this.taskRepository.update(
       {
         isDone: dto.isDone,
       },
@@ -34,11 +35,23 @@ export class TasksService {
         },
       },
     );
-    return await this.taskRepository.findByPk(id); // Находим второй раз для получения актуальных данных
+  }
+
+  async changeAllStatusTasks(dto: TaskStatusDto) {
+    return await this.taskRepository.update(
+      {
+        isDone: dto.isDone,
+      },
+      {
+        where: {
+          isDone: !dto.isDone,
+        },
+      },
+    );
   }
 
   async changeTextTask(id: string, dto: TaskTextDto) {
-    await this.taskRepository.update(
+    return await this.taskRepository.update(
       {
         text: dto.text,
         isDone: false,
@@ -49,8 +62,6 @@ export class TasksService {
         },
       },
     );
-
-    return await this.taskRepository.findByPk(id);
   }
 
   async deleteTask(id: string) {

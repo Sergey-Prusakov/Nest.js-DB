@@ -30,6 +30,11 @@ export class TasksController {
     return this.tasksService.changeStatusTask(id, dto);
   }
 
+  @Patch('/changeAllStatus')
+  changeAllStatus(@Body() dto: TaskStatusDto) {
+    return this.tasksService.changeAllStatusTasks(dto);
+  }
+
   @Patch('/changeText')
   changeText(@Query('id') id: string, @Body() dto: TaskTextDto) {
     return this.tasksService.changeTextTask(id, dto);
