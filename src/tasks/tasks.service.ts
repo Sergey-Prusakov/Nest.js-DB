@@ -10,7 +10,6 @@ export class TasksService {
 
   async getAllTasks() {
     const tasks = await this.taskRepository.findAll({
-      limit: 10,
       order: [['createdAt', 'ASC']],
     });
     return tasks;
@@ -21,10 +20,6 @@ export class TasksService {
   }
 
   async changeStatusTask(id: string, dto: TaskStatusDto) {
-    const task = await this.taskRepository.findByPk(id);
-
-    console.log(task);
-
     return await this.taskRepository.update(
       {
         isDone: dto.isDone,

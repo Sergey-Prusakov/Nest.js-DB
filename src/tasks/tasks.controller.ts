@@ -25,27 +25,27 @@ export class TasksController {
     return this.tasksService.createTask(taskDto);
   }
 
-  @Patch('/changeStatus')
+  @Patch('/changeStatusTask')
   changeStatus(@Query('id') id: string, @Body() dto: TaskStatusDto) {
     return this.tasksService.changeStatusTask(id, dto);
   }
 
-  @Patch('/changeAllStatus')
+  @Patch('/changeAllStatusTasks')
   changeAllStatus(@Body() dto: TaskStatusDto) {
     return this.tasksService.changeAllStatusTasks(dto);
   }
 
-  @Patch('/changeText')
+  @Patch('/changeTextTask')
   changeText(@Query('id') id: string, @Body() dto: TaskTextDto) {
     return this.tasksService.changeTextTask(id, dto);
   }
 
-  @Delete('/delete')
+  @Delete('/deleteTask')
   delete(@Query('id') id: string) {
     return this.tasksService.deleteTask(id);
   }
 
-  @Delete('/deleteCompleted')
+  @Delete('/deleteCompletedTasks')
   deleteCompleted() {
     return this.tasksService.deleteCompletedTasks();
   }
