@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+
 import { AppModule } from './app.module';
 
 async function start() {
@@ -6,9 +7,9 @@ async function start() {
   const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: [
-      'http://127.0.0.1:5500',
-      'https://t2.academy.dunice-testing.com',
-      'https://t1.academy.dunice-testing.com/',
+      process.env.ORIGIN_HOST1,
+      process.env.ORIGIN_HOST2,
+      process.env.ORIGIN_HOST3,
     ],
     credentials: true,
   });

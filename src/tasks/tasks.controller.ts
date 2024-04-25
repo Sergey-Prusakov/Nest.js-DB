@@ -3,12 +3,12 @@ import {
   Controller,
   Delete,
   Get,
+  Param,
   Patch,
   Post,
-  Query,
 } from '@nestjs/common';
-import { TaskTextDto } from './dto/task-text-dto';
-import { TaskStatusDto } from './dto/task-status-dto';
+
+import { TaskDto } from './dto/task-dto';
 import { TasksService } from './tasks.service';
 
 @Controller('tasks')
@@ -20,32 +20,27 @@ export class TasksController {
     return this.tasksService.getAllTasks();
   }
 
-  @Post('/createTask')
-  create(@Body() taskDto: TaskTextDto) {
+  @Post()
+  create(@Body() taskDto: TaskDto) {
     return this.tasksService.createTask(taskDto);
   }
 
-  @Patch('/changeStatusTask')
-  changeStatus(@Query('id') id: string, @Body() dto: TaskStatusDto) {
-    return this.tasksService.changeStatusTask(id, dto);
+  @Patch('/:id')
+  change(@Param('id') id: string, @Body() dto: TaskDto) {
+    return this.tasksService.changeTask(id, dto);
   }
 
-  @Patch('/changeAllStatusTasks')
-  changeAllStatus(@Body() dto: TaskStatusDto) {
+  @Patch()
+  changeAllStatus(@Body() dto: TaskDto) {
     return this.tasksService.changeAllStatusTasks(dto);
   }
 
-  @Patch('/changeTextTask')
-  changeText(@Query('id') id: string, @Body() dto: TaskTextDto) {
-    return this.tasksService.changeTextTask(id, dto);
-  }
-
-  @Delete('/deleteTask')
-  delete(@Query('id') id: string) {
+  @Delete('/:id')
+  delete(@Param('id') id: string) {
     return this.tasksService.deleteTask(id);
   }
 
-  @Delete('/deleteCompletedTasks')
+  @Delete()
   deleteCompleted() {
     return this.tasksService.deleteCompletedTasks();
   }

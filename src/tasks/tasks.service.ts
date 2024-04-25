@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+
 import { Task } from './tasks.model';
-import { TaskTextDto } from './dto/task-text-dto';
-import { TaskStatusDto } from './dto/task-status-dto';
+import { TaskDto } from './dto/task-dto';
 
 @Injectable()
 export class TasksService {
@@ -15,13 +15,14 @@ export class TasksService {
     return tasks;
   }
 
-  async createTask(dto: TaskTextDto) {
+  async createTask(dto: TaskDto) {
     return await this.taskRepository.create(dto);
   }
 
-  async changeStatusTask(id: string, dto: TaskStatusDto) {
+  async changeTask(id: string, dto: TaskDto) {
     return await this.taskRepository.update(
       {
+        text: dto.text,
         isDone: dto.isDone,
       },
       {
@@ -32,7 +33,7 @@ export class TasksService {
     );
   }
 
-  async changeAllStatusTasks(dto: TaskStatusDto) {
+  async changeAllStatusTasks(dto: TaskDto) {
     return await this.taskRepository.update(
       {
         isDone: dto.isDone,
@@ -40,20 +41,6 @@ export class TasksService {
       {
         where: {
           isDone: !dto.isDone,
-        },
-      },
-    );
-  }
-
-  async changeTextTask(id: string, dto: TaskTextDto) {
-    return await this.taskRepository.update(
-      {
-        text: dto.text,
-        isDone: false,
-      },
-      {
-        where: {
-          id,
         },
       },
     );
